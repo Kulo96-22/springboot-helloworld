@@ -1,9 +1,6 @@
 pipeline {
     agent any
-    tools {
-        maven 'Maven_3.9'
-        jdk 'JDK_21'
-    }
+ 
     environment {
         DOCKER_IMAGE = "kulochana/springboot-helloworld"
     }
@@ -39,5 +36,6 @@ pipeline {
         }
     }
 }
+
 
 
