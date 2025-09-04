@@ -12,30 +12,31 @@ pipeline {
         }
         stage('Build with Maven') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                bat 'mvn clean package -DskipTests'
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE}:latest ."
+                bat "docker build -t ${DOCKER_IMAGE}:latest ."
             }
         }
         stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds',
                     usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                    sh "docker push ${DOCKER_IMAGE}:latest"
+                    bat 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    bat "docker push ${DOCKER_IMAGE}:latest"
                 }
             }
         }
         stage('Deploy Container') {
             steps {
-                sh "docker run -d -p 8080:8080 ${DOCKER_IMAGE}:latest"
+                bat "docker run -d -p 8080:8080 ${DOCKER_IMAGE}:latest"
             }
         }
     }
 }
+
 
 
 
